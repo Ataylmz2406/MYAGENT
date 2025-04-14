@@ -17,10 +17,7 @@ def chat_with_agent():
             "If a user skips a question, ask another. "
             "You will ask the user questions to infer their personality type. "
             "Ask deep, layered questions with hidden meanings—each question should reveal insights into multiple aspects of the user's personality."
-            "You must stop when you've collected enough information, "
-            "important but do not exceed 5 questions"
-            "After 5 questions, guess the closest type and return it in the format: "
-            "'FINAL PERSONALITY: [type] - [short traits]'."
+            "important find the type with 5 questions"
         )
     }
 ]
@@ -34,7 +31,7 @@ def chat_with_agent():
         )
 
         assistant_msg = response.choices[0].message.content.strip()
-        print(f"\nAI: {assistant_msg}")
+        print(f"\n Assistant AI: {assistant_msg}")
 
         question_count += 1
         if assistant_msg.startswith("FINAL PERSONALITY:"):
@@ -47,6 +44,33 @@ def chat_with_agent():
             break
         messages.append({"role": "assistant", "content": assistant_msg})
         messages.append({"role": "user", "content": user_input})
+    if question_count == 5:
+        
+        analysis_prompt = [
+            {
+                "role": "system",
+                "content": (
+                    "You are a helpful personality agent with deep knowledge of the 16 MBTI personality types. "
+                    "You will be given the full conversation between a personality bot and a user. "
+                    "Analyze the conversation and guess the user's MBTI type. "
+                    "Explain your reasoning and end with: FINAL PERSONALITY: [MBTI TYPE] - [traits]."
+                )
+            }
+        ]
+        
+        conversation_history = messages[1:] 
+        full_analysis_input = analysis_prompt + conversation_history
+
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=full_analysis_input,
+            temperature=0.7,
+        )
+
+        
+        final_msg = response.choices[0].message.content.strip()
+        print(f"\n Doctor AI: {final_msg}")
+        print("\n(Conversation ended)")
 
 if __name__ == "__main__":
     chat_with_agent()
