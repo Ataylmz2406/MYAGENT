@@ -2,7 +2,6 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# Load your API key from .env
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -28,7 +27,7 @@ def chat_with_agent():
     while question_count <= 5:
      
         response = client.chat.completions.create(
-            model="gpt-4o",  # or "gpt-3.5-turbo"
+            model="gpt-3.5-turbo",  
             messages=messages,
             temperature=0.7, # creativity
         )
