@@ -42,6 +42,9 @@ def chat_with_agent():
             break
 
         user_input = input("\nYOU: ")
+        if user_input.lower() in ["exit", "quit"]:
+            print("\n(Conversation ended)")
+            break
         messages.append({"role": "assistant", "content": assistant_msg})
         messages.append({"role": "user", "content": user_input})
 
