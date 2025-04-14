@@ -12,19 +12,20 @@ def chat_with_agent():
         "role": "system",
         "content": (
             "You are a helpful personality agent with deep knowledge of the 16 MBTI personality types. "
-            "Ask them one by one wait for the user to answer. "
-            "if the user asks for a specific type, you will provide a detailed description of that type. "
-            "if a user skips a question ask another question. "
+            "Ask them one by one. Wait for the user to answer. "
+            "If the user asks for a specific type, provide a detailed description of that type. "
+            "If a user skips a question, ask another. "
             "You will ask the user questions to infer their personality type. "
-            "Make the questions deep and make it so that each question has hidden meanings."
+            "Ask deep, layered questions with hidden meanings—each question should reveal insights into multiple aspects of the user's personality."
             "You must stop when you've collected enough information, "
             "important but do not exceed 5 questions"
-            "after 5 questions guess the closest type and give that type. When you're done, reply with 'FINAL PERSONALITY:' followed by their type and traits."
+            "After 5 questions, guess the closest type and return it in the format: "
+            "'FINAL PERSONALITY: [type] - [short traits]'."
         )
     }
 ]
 
-    while question_count <= 5:
+    while question_count < 5:
      
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",  
@@ -36,7 +37,7 @@ def chat_with_agent():
         print(f"\nAI: {assistant_msg}")
 
         question_count += 1
-        if question_count >= 6 or assistant_msg.startswith("FINAL PERSONALITY:"):
+        if assistant_msg.startswith("FINAL PERSONALITY:"):
             print("\n(Conversation ended)")
             break
 
